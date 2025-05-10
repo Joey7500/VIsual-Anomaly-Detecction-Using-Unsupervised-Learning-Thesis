@@ -1,1 +1,1 @@
-# You can check out both jupyter notebook files. Baseline one contains basic autoencoder. The DeepFeaureReconstrucion one contatins advanced autoencoder.
+# You can check out both models in separate layers. There are architectures and some other important files
