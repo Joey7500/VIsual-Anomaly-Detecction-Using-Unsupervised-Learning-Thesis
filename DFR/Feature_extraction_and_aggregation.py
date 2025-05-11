@@ -21,7 +21,8 @@ class efficientnet_feature_extractor(nn.Module):
         self.model.features[6][-1].register_forward_hook(get_features)
         
         self.pool = nn.AvgPool2d(kernel_size=3, stride=3)
-
+        self.input_size = 512
+        
     def forward(self, input):
         self.features = []  # Reset feature container.
         with torch.no_grad():
