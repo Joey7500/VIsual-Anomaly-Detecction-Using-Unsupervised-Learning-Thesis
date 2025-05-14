@@ -152,7 +152,7 @@ def run_inference(image_pil, zoom, model, backbone, transform, save_dir):
         features = backbone(x)
         recon = model(features)
 
-    segm_map = ((features - recon) ** 2).mean(1)[:, 4:-4, 4:-4]
+    segm_map = ((features - recon) ** 2).mean(1)[:, 20:-20, 20:-20]
     segm_map_full = ((features - recon) ** 2).mean(1)
     score_val = decision_function(segm_map)[0].item()
 
