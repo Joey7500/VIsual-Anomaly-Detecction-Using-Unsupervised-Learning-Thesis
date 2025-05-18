@@ -20,7 +20,7 @@ class efficientnet_feature_extractor(nn.Module):
 
         def get_features(module, input, output):
             self.features.append(output)
-        for idx in range(1, 6):
+        for idx in range(1, 7):
             self.model.features[idx][-1].register_forward_hook(get_features)
 
         self.input_size = 512
