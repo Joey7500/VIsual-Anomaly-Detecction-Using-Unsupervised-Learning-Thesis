@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 import random
-IMAGE_DIR = r"F:\all\24_02\Test_data"
+IMAGE_DIR = "Path"
 
 
 def adjust_gamma(image, gamma=1.0):
