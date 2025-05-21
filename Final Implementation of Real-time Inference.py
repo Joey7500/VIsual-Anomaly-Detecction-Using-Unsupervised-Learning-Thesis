@@ -209,7 +209,7 @@ def main():
         transforms.ToTensor()
     ])
     backbone = EfficientNetFeatureExtractor().cuda().eval()
-    model = DFR_FeatureCAE(in_channels=832, latent_dim=220).cuda().eval()
+    model = DFR_FeatureCAE(in_channels=832, latent_dim=260).cuda().eval()
     model.load_state_dict(torch.load(r"PATH.pth"))
 
     while True:
