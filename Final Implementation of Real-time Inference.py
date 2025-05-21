@@ -78,7 +78,7 @@ class EfficientNetFeatureExtractor(nn.Module):
 
 # DFR Feature Convolutional Autoencoder
 class DFR_FeatureCAE(nn.Module):
-    def __init__(self, in_channels=832, latent_dim=220, is_bn=True):
+    def __init__(self, in_channels=832, latent_dim=260, is_bn=True):
         super().__init__()
         mid1 = (in_channels + 2 * latent_dim) // 2
 
