@@ -4,7 +4,7 @@ window_size = 7
 sigma = 1.5
 # Create Gaussian kernel
 coords = torch.arange(window_size).float() - window_size//2
-gaussian_kernel = torch.exp(-(coords**2).unsqueeze(0) - (coords**2).unsqueeze(1) / (2*(sigma**2)))
+gaussian_kernel = torch.exp(-((coords**2).unsqueeze(0) + (coords**2).unsqueeze(1)) / (2*(sigma**2)))
 gaussian_kernel = gaussian_kernel / gaussian_kernel.sum()
 gaussian_kernel = gaussian_kernel.view(1, 1, window_size, window_size)  # shape [1,1,7,7]
 def ssim_loss(img, recon):
