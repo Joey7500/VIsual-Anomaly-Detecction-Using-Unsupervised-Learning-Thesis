@@ -1,4 +1,4 @@
-# Full Anomaly Detection Script with EfficientNet-B6 and DFR FeatureCAE
+
 import os
 import time
 import datetime
@@ -6,26 +6,23 @@ from pathlib import Path
 import cv2
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 import imagingcontrol4 as ic4
-from torchvision.models import efficientnet_b6, EfficientNet_B6_Weights
 
-# Save Directory
-SAVE_DIR = Path(r"PATH")
+# --- Save Path ---
+SAVE_DIR = Path(r"C:/Users/ZBook/Documents/Saved_detection")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
-# Constants
-BEST_THRESHOLD = 0.02927
-HEATMAP_MIN = 0.0057176095
-HEATMAP_MAX = 0.07252328
+# --- Constants ---
+BEST_THRESHOLD = xxx
+HEATMAP_MIN = xxx
+HEATMAP_MAX = xxx
 ZOOM_OPTIONS = {"1": 40, "2": 50, "3": 60}
-ZOOM_KEYS = list(ZOOM_OPTIONS.keys())
 
-# Preprocessing Functions
+# --- Preprocessing ---
 def adjust_gamma(image, gamma=1.0):
     inv_gamma = 1.0 / gamma
     table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
@@ -46,7 +43,50 @@ def apply_clahe_color(image):
 def test_enhancement(image):
     return unsharp_mask(adjust_gamma(apply_clahe_color(image), 0.8))
 
-# EfficientNet-B6 Feature Extractor
+# --- Camera Capture Function ---
+def capture_image_from_camera(zoom_level):
+   
+    grabber = ic4.Grabber()
+    devices = ic4.DeviceEnum.devices()
+    if len(devices) == 0:
+        raise RuntimeError("No camera found.")
+    grabber.device_open(devices[0])
+
+    g = grabber.device_property_map
+    g.set_value(ic4.PropId.OFFSET_X, 0)
+    g.set_value(ic4.PropId.OFFSET_Y, 0)
+    g.set_value(ic4.PropId.WIDTH, 1024)
+    g.set_value(ic4.PropId.HEIGHT, 1024)
+    g.set_value(ic4.PropId.ZOOM, zoom_level)
+    time.sleep(0.4)
+
+    try:
+        g.set_value(ic4.PropId.EXPOSURE_TIME, 100000)
+        g.set_value(ic4.PropId.FOCUS, 555)
+        g.set_value(ic4.PropId.GAMMA, 1)
+        g.set_value(ic4.PropId.IRIS, 786)
+        g.set_value(ic4.PropId.CONTRAST, 0)
+        g.set_value(ic4.PropId.GAIN, 0)
+        g.set_value(ic4.PropId.SHARPNESS, 0)
+        g.set_value(ic4.PropId.EXPOSURE_AUTO_REFERENCE, 0)
+    except ic4.IC4Exception as ex:
+        print(f"Camera config error: {ex.message}")
+
+    sink = ic4.SnapSink()
+    grabber.stream_setup(sink, setup_option=ic4.StreamSetupOption.ACQUISITION_START)
+
+    try:
+        image = sink.snap_single(3000)
+        np_img = image.numpy_copy()
+    except ic4.IC4Exception as ex:
+        print(f"Error capturing image: {ex.message}")
+        np_img = None
+
+    grabber.stream_stop()
+    grabber.device_close()
+    return np_img
+
+# --- Model Architecture ---
 class EfficientNetFeatureExtractor(nn.Module):
     def __init__(self):
         super().__init__()
@@ -76,8 +116,8 @@ class EfficientNetFeatureExtractor(nn.Module):
         pooled = [self.pool(fm) for fm in upsampled]
         return torch.cat(pooled, dim=1)
 
-# DFR Feature Convolutional Autoencoder
-class DFR_FeatureCAE(nn.Module):
+# --- Autoencoder ---
+class FeatCAE(nn.Module):
     def __init__(self, in_channels=832, latent_dim=260, is_bn=True):
         super().__init__()
         mid1 = (in_channels + 2 * latent_dim) // 2
@@ -108,43 +148,10 @@ class DFR_FeatureCAE(nn.Module):
         latent = self.encoder(x)
         return self.decoder(latent)
 
-# Camera Capture
-def capture_image_from_camera(zoom_level):
-    grabber = ic4.Grabber()
-    grabber.device_open(ic4.DeviceEnum.devices()[0])
-    g = grabber.device_property_map
-    g.set_value(ic4.PropId.OFFSET_X, 0)
-    g.set_value(ic4.PropId.OFFSET_Y, 0)
-    g.set_value(ic4.PropId.WIDTH, 1024)
-    g.set_value(ic4.PropId.HEIGHT, 1024)
-    g.set_value(ic4.PropId.ZOOM, zoom_level)
-    time.sleep(0.4)
-    try:
-        g.set_value(ic4.PropId.EXPOSURE_TIME, 100000)
-        g.set_value(ic4.PropId.FOCUS, 555)
-        g.set_value(ic4.PropId.GAMMA, 1)
-        g.set_value(ic4.PropId.IRIS, 786)
-        g.set_value(ic4.PropId.CONTRAST, 0)
-        g.set_value(ic4.PropId.GAIN, 0)
-        g.set_value(ic4.PropId.SHARPNESS, 0)
-        g.set_value(ic4.PropId.EXPOSURE_AUTO_REFERENCE, 0)
-    except ic4.IC4Exception as ex:
-        print(f"Camera config error: {ex.message}")
-    sink = ic4.SnapSink()
-    grabber.stream_setup(sink, ic4.StreamSetupOption.ACQUISITION_START)
-    try:
-        image = sink.snap_single(3000)
-        np_img = image.numpy_copy()
-    except ic4.IC4Exception as ex:
-        print(f"Capture error: {ex.message}")
-        np_img = None
-    grabber.stream_stop()
-    grabber.device_close()
-    return np_img
-
 def decision_function(segm_map):
     return torch.stack([torch.sort(m.flatten(), descending=True)[0][:20].mean() for m in segm_map])
 
+# --- Inference ---
 def run_inference(image_pil, zoom, model, backbone, transform, save_dir):
     start = time.time()
     x = transform(image_pil).unsqueeze(0).cuda()
@@ -163,13 +170,6 @@ def run_inference(image_pil, zoom, model, backbone, transform, save_dir):
     else:
         cls = "NOK"; color = "red"
 
-    if cls == "CLOSE":
-        idx = ZOOM_KEYS.index(str(zoom))
-        if idx > 0:
-            new_key = ZOOM_KEYS[idx - 1]
-            print(f"Reclassifying with zoom {ZOOM_OPTIONS[new_key]}")
-            return new_key
-
     np_img = x.squeeze().permute(1, 2, 0).cpu().numpy()
     heat_map = segm_map_full.squeeze().cpu().numpy()
     heat_map_resized = cv2.resize(heat_map, (np_img.shape[1], np_img.shape[0]))
@@ -177,56 +177,104 @@ def run_inference(image_pil, zoom, model, backbone, transform, save_dir):
 
     plt.switch_backend('TkAgg')
     plt.figure(figsize=(24, 8))
-    plt.subplot(1, 3, 1); plt.imshow(np_img); plt.title('Input'); plt.axis('off')
+    plt.subplot(1, 3, 1)
+    plt.imshow(np_img); plt.title('Input Image', fontsize=18); plt.axis('off')
     plt.subplot(1, 3, 2)
-    plt.imshow(np_img); plt.imshow(heat_map_resized, cmap='jet', alpha=0.4,
-                                   vmin=HEATMAP_MIN, vmax=HEATMAP_MAX); plt.axis('off'); plt.title('Heatmap')
-    plt.subplot(1, 3, 3); plt.imshow(np_img)
+    plt.imshow(np_img); plt.imshow(heat_map_resized, cmap='jet', alpha=0.4, vmin=HEATMAP_MIN, vmax=HEATMAP_MAX)
+    plt.axis('off'); plt.title('Heatmap Overlay', fontsize=18)
+    plt.subplot(1, 3, 3)
+    plt.imshow(np_img)
     overlay = np.zeros_like(np_img)
     if cls == "OK": overlay[:, :, 1] = 1.0
     elif cls == "CLOSE": overlay[:, :, :2] = 1.0
     else: overlay[:, :, 0] = 1.0
-    plt.imshow(overlay, alpha=0.2); plt.axis('off')
+    plt.imshow(overlay, alpha=0.2)
+    plt.axis('off')
     ax = plt.gca()
-    ax.text(0.95, 0.05, cls, transform=ax.transAxes, ha='right', va='bottom',
-            fontsize=100, color=color, fontweight='bold')
-    plt.title(f'Score: {score_val:.4f} || Time: {elapsed:.2f}s', fontsize=16)
+    ax.text(0.95, 0.05, cls, transform=ax.transAxes, ha='right', va='bottom', fontsize=100, color=color, fontweight='bold')
+    plt.title(f'Anomaly Score: {score_val/BEST_THRESHOLD:.4f} || Time: {elapsed:.3f} s', fontsize=18, fontweight='bold')
     plt.tight_layout()
 
-    filename = f"zoom_{zoom}_timestamp_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{cls}.png"
-    save_ = (save_dir) / cls / filename
-    save_.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(save_, bbox_inches='tight')
-    print(f"Saved to {save_}")
-    plt.show()
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"zoom_{zoom}_timestamp_{timestamp}_{cls}.png"
 
+
+    if cls == "OK":
+        subfolder = "OK"
+    elif cls == "CLOSE":
+        subfolder = "CLOSE"
+    else:
+        subfolder = "NOK"
+
+    save_path = Path(save_dir) / subfolder / filename
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+
+
+    plt.savefig(save_path, bbox_inches='tight') 
+    print(f"Saved to {save_path}")
+
+    mng = plt.get_current_fig_manager()
+    try:
+        mng.window.state('zoomed')
+    except:
+        pass
+
+    plt.show()
+    return cls 
+
+# --- Helper function for next higher zoom ---
+def get_next_zoom_key(current_key, zoom_keys):
+    idx = zoom_keys.index(current_key)
+    if idx < len(zoom_keys) - 1:
+        return zoom_keys[idx + 1]
     return None
+
+
+# --- Main Loop ---
 
 def main():
     ic4.Library.init()
-    transform = transforms.Compose([
-        transforms.Resize((512, 512)),
-        transforms.ToTensor()
-    ])
+    transform = transforms.Compose([transforms.Resize((512, 512)), transforms.ToTensor()])
     backbone = EfficientNetFeatureExtractor().cuda().eval()
-    model = DFR_FeatureCAE(in_channels=832, latent_dim=260).cuda().eval()
-    model.load_state_dict(torch.load(r"PATH.pth"))
+    model = FeatCAE().cuda().eval()
+    model.load_state_dict(torch.load(r"C:/EffNet_170.pth"))
 
     while True:
         key = input("Choose zoom: 1=40, 2=50, 3=60, q=quit\n> ")
-        if key == "q": break
-        if key not in ZOOM_OPTIONS: continue
+        if key == "q":
+            break
+        if key not in ZOOM_OPTIONS:
+            continue
 
         zoom = ZOOM_OPTIONS[key]
         raw = capture_image_from_camera(zoom)
         if raw is None:
-            print("Failed to capture.")
+            print("Failed to capture image.")
             continue
 
-        enhanced = test_enhancement(raw)
-        pil_img = Image.fromarray(cv2.cvtColor(enhanced, cv2.COLOR_BGR2RGB))
-        new_key = run_inference(pil_img, zoom, model, backbone, transform, SAVE_DIR)
-        if new_key: continue
+        if len(raw.shape) == 2 or raw.shape[2] == 1:
+            raw = cv2.cvtColor(raw, cv2.COLOR_GRAY2BGR)
 
+        enhanced = test_enhancement(raw)
+        rgb = cv2.cvtColor(enhanced, cv2.COLOR_BGR2RGB)
+        pil_img = Image.fromarray(rgb)
+
+        cls = run_inference(
+        	image_pil=pil_img,
+        	zoom=zoom,
+        	model=model,
+        	backbone=backbone,
+        	transform=transform,
+        	save_dir=SAVE_DIR
+         )
+
+        if cls == "CLOSE":
+                next_key = get_next_zoom_key(key, zoom_keys)
+                if next_key is not None:
+                	print(f"Result is CLOSE. Zooming in further to {ZOOM_OPTIONS[next_key]}.")
+                	key = next_key
+                	continue
+        break
+       
 if __name__ == "__main__":
     main()
