@@ -1,1 +1,1 @@
-# You can check out both models in separate folders. There are architectures and some other important files
+# You can check out both models in separate folders. Filea common for those models are in common file
