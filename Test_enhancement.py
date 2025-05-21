@@ -2,7 +2,6 @@ import os
 import cv2
 import numpy as np
 
-# Cesty ke složkám
 input_folder = r"Path"
 output_folder = r"Path"
 
@@ -48,4 +47,4 @@ if __name__ == "__main__":
 
         cv2.imwrite(output_path, enhanced_image)
 
-    print("Všechny obrázky byly zpracovány a uloženy.")
+    print("Done")
