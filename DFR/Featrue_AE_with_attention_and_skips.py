@@ -83,10 +83,3 @@ class DFR_FeatureCAE(nn.Module):
 
         out = self.dec3(d2)
         return out
-
-# Example usage
-if __name__ == "__main__":
-    model = DFR_FeatureCAE(in_channels=832, latent_dim=260, is_bn=True, use_cbam=True, dropout=0.1)
-    x = torch.randn(4, 832, 128, 128)
-    y = model(x)
-    print("Output shape:", y.shape)
