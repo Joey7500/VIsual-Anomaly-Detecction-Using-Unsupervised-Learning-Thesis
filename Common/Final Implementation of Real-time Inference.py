@@ -108,13 +108,15 @@ class EfficientNetFeatureExtractor(nn.Module):
 
         self.pool = nn.AvgPool2d(kernel_size=3, stride=3)
 
+
     def forward(self, x):
-        self.features = []
-        with torch.no_grad():
-            _ = self.model(x)
-        upsampled = [F.interpolate(fm, size=(170, 170), mode='bilinear', align_corners=False) for fm in self.features]
-        pooled = [self.pool(fm) for fm in upsampled]
-        return torch.cat(pooled, dim=1)
+    self.features = []
+    with torch.no_grad():
+        _ = self.model(x)
+    upsampled = [F.interpolate(fm, size=(512, 512), mode='bilinear', align_corners=False) for fm in self.features]
+    pooled = [self.pool(fm) for fm in upsampled]
+    return torch.cat(pooled, dim=1)
+
 
 # --- Autoencoder ---
 class FeatCAE(nn.Module):
