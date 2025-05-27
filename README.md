@@ -1,1 +1,1 @@
-# You can check out both models in separate folders. Additional files are separated.
+# You can check out both models in separate folders. Also chceck complete notebook.
