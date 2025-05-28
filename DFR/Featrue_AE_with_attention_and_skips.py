@@ -32,7 +32,7 @@ class CBAM(nn.Module):
 
 # Main model
 class DFR_FeatureCAE(nn.Module):
-    def __init__(self, in_channels=832, latent_dim=260, is_bn=True, use_cbam=False, dropout=0.0, use_skip=True):
+    def __init__(self, in_channels=832, latent_dim=260, is_bn=True, use_cbam=True, dropout=0.0, use_skip=True):
         super().__init__()
         self.use_skip = use_skip
         self.use_cbam = use_cbam
