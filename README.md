@@ -7,7 +7,7 @@
 
 > A production-ready pipeline for detecting visual defects on automotive plastic components using unsupervised deep learning
 
-This repository supports my bachelor's thesis "Visual Anomaly Detection of Intake Module Pre-filters Using Unsupervised Deep Learning" from Brno University of Technology. The work presents a lightweight, industrial-grade solution for automated quality inspection of automotive pre-filter components.
+This repository supports my bachelor's thesis "Visual Anomaly Detection of Intake Module Pre-filters Using Unsupervised Deep Learning" from Brno University of Technology. The work presents an industrial-grade solution for automated quality inspection of automotive pre-filter components.
 
 **🎯 Key Achievement:** AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
 
@@ -22,7 +22,6 @@ Both models are trained exclusively on normal (OK) images and evaluated on both 
 
 ## 📁 Contents
 
-- [🚀 Quick Start](#-quick-start)
 - [🔬 Problem & Data](#-problem--data)
 - [🧠 Methods](#-methods)
 - [📊 Results](#-results)
@@ -40,18 +39,6 @@ Both models are trained exclusively on normal (OK) images and evaluated on both 
 - PyTorch with CUDA support (recommended)
 - GPU with ≥11GB VRAM (for DFR models)
 
-### Installation
-git clone [your-repo-url]
-cd visual-anomaly-detection-prefilters
-pip install torch torchvision opencv-python numpy scikit-learn matplotlib
-
-
-### Basic Usage
-Load the best performing model (DFR Model-170)
-python Final_implementation_of_Real-time_inference.py
-
-
-
 ## 🔬 Problem & Data
 
 ### Target Component
@@ -59,7 +46,8 @@ python Final_implementation_of_Real-time_inference.py
 - **Challenge**: Glossy "top show surface" susceptible to scratches and burns
 - **Constraint**: Limited defective samples → unsupervised learning approach
 
-**📸 ADD IMAGE: Figure 15 - Complete pre-filter part**
+<img width="1159" height="423" alt="image" src="https://github.com/user-attachments/assets/e5a7b42a-f38b-415d-940b-168e3122ce76" />
+
 
 ### Experimental Setup
 - **Imaging Environment**: 80×80×80cm reflective lightbox with dual LED strips
