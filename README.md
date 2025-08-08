@@ -46,7 +46,8 @@ Both models are trained exclusively on normal (OK) images and evaluated on both 
 - **Challenge**: Glossy "top show surface" susceptible to scratches and burns
 - **Constraint**: Limited defective samples → unsupervised learning approach
 
-<img width="1159" height="423" alt="image" src="https://github.com/user-attachments/assets/e5a7b42a-f38b-415d-940b-168e3122ce76" />
+**<img width="1159" height="423" alt="image" src="https://github.com/user-attachments/assets/e5a7b42a-f38b-415d-940b-168e3122ce76" />
+Figure 1 - Pre-filter part**
 
 
 ### Experimental Setup
@@ -54,7 +55,8 @@ Both models are trained exclusively on normal (OK) images and evaluated on both 
 - **Camera**: DFK Z12GX236 (Sony IMX236LQ sensor, 1920×1200 → 1024×1024 crop)
 - **Lighting**: 5500K LEDs with bidirectional setup for optimal scratch detection
 
-**📸 ADD IMAGE: Figure 18 - Experimental setup for image acquisition**
+**<img width="1117" height="691" alt="image" src="https://github.com/user-attachments/assets/de30d8d7-ec09-48a5-8d22-d6b0b7e309a5" />
+: Figure 1- Experimental setup for image acquisition**
 
 ### Dataset Statistics
 | Split | Parts | Images per Part | Total Images |
