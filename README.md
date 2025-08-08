@@ -189,12 +189,19 @@ Figure 8 - Final implementation (NOK part with overlay)
 ## 📂 Dataset Structure
 
 data/
+
 ├── train/
+
 │ └── ok/ # Normal images only (unsupervised)
+
 ├── test/
+
 │ ├── ok/ # Normal test images
+
 │ └── nok/ # Anomalous test images
+
 └── masks/
+
 └── nok/ # Binary segmentation masks (same basenames as test/nok)
 
 **Dataset Splits:**
