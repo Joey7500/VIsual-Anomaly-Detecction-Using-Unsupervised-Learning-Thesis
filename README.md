@@ -121,7 +121,44 @@ Two datasets:
 - PyTorch + CUDA
 - GPU ≥ 11GB VRAM recommended (DFR feature tensors are large)
 
+---
+
+## 🚀 Quickstart
+
+### 1. Requirements
+- Python **3.9+**
+- [PyTorch](https://pytorch.org/get-started/locally/) with CUDA support (recommended)
+- GPU with **≥ 11 GB VRAM** for DFR models (feature tensors are large)
+
 ```bash
+# Clone the repository
 git clone <repo_url>
 cd <repo>
+
+# Install dependencies
 pip install -r requirements.txt
+
+
+data/
+  train/
+    ok/
+  test/
+    ok/
+    nok/
+    masks/
+      nok/
+
+
+python Baseline_AE_with_attention.py \
+    --train_dir data/train/ok \
+    --test_ok_dir data/test/ok \
+    --test_nok_dir data/test/nok \
+    --masks_dir data/test/masks/nok \
+    --epochs 25 \
+    --batch_size 16
+
+
+python Feature_extraction_and_aggregation.py \
+    --dataset Dataset-A \
+    --output_dir features/
+
