@@ -56,7 +56,7 @@ Figure 1 - Pre-filter part**
 - **Lighting**: 5500K LEDs with bidirectional setup for optimal scratch detection
 
 **<img width="1117" height="691" alt="image" src="https://github.com/user-attachments/assets/de30d8d7-ec09-48a5-8d22-d6b0b7e309a5" />
-: Figure 1- Experimental setup for image acquisition**
+Figure 2 - Experimental setup for image acquisition**
 
 ### Dataset Statistics
 | Split | Parts | Images per Part | Total Images |
@@ -70,7 +70,8 @@ Figure 1 - Pre-filter part**
   - Gamma correction (γ=0.8)
   - Unsharp masking for edge enhancement
 
-**📸 ADD IMAGE: Figure 23 - Enhancement effect comparison (before/after)**
+**<img width="1109" height="462" alt="image" src="https://github.com/user-attachments/assets/94820876-f339-45b3-b6b1-32e7347c726f" />
+Figure 3 - Enhancement effect comparison (before/after)**
 
 - **Augmentation** (training):
   - Photometric: gamma [0.7,1.25], brightness [0.8,1.05], contrast [0.8,1.2]
@@ -121,12 +122,15 @@ Input → EfficientNet-B6 → Multi-scale Features → Feature Autoencoder → A
 
 *Artificially inflated by background reconstruction
 
-**📸 ADD IMAGE: Figure 31 - ROC curve of best model (170-B)**
+**<img width="752" height="625" alt="image" src="https://github.com/user-attachments/assets/1077bcf6-1494-4fb7-bc72-963fc313c4dc" />
+Figure 4 - ROC curve of best model (170-B)**
 
 ### Qualitative Results
 
-**📸 ADD IMAGE: Figure 32 - DFR outputs for Dataset-A (original, heatmap, ground truth, prediction)**
-**📸 ADD IMAGE: Figure 33 - DFR outputs for Dataset-B (original, heatmap, ground truth, prediction)**
+**<img width="666" height="734" alt="image" src="https://github.com/user-attachments/assets/c4ebb433-5cd3-4c2e-ab47-fb74eb7de1be" />
+Figure 5 - DFR outputs for Dataset-A: (a) original, (b) heatmap, (c) ground truth, (d) prediction)**
+**<img width="666" height="733" alt="image" src="https://github.com/user-attachments/assets/f90f7802-4727-4047-9692-98110130f5d3" />
+Figure 6 - DFR outputs for Dataset-B: (a) original, (b) heatmap, (c) ground truth, (d) prediction)**
 
 **🏆 Production Choice**: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
 
@@ -165,8 +169,10 @@ python Final_implementation_of_Real-time_inference.py
 - Anomaly heatmap visualization  
 - Thresholded binary mask overlay
 
-**📸 ADD IMAGE: Figure 34 - Final implementation (OK part example)**
-**📸 ADD IMAGE: Figure 35 - Final implementation (NOK part with overlay)**
+**<img width="935" height="312" alt="image" src="https://github.com/user-attachments/assets/1131e886-16dc-42ad-bcfc-91595976bd1b" />
+Figure 7 - Final implementation (OK part example)**
+**<img width="933" height="276" alt="image" src="https://github.com/user-attachments/assets/eaebaa80-5b66-46ef-87d4-94d600129343" />
+Figure 8 - Final implementation (NOK part with overlay)**
 
 ⚠️ **Note**: 20px border cropping applied to suppress padding artifacts - keep critical regions away from image edges.
 
@@ -253,7 +259,7 @@ Core scripts from thesis appendix:
 
 ## 🤝 Contributing
 
-This repository primarily serves as a research artifact. For industrial applications or extensions, please reach out through the thesis supervisor or university contact.
+This repository primarily serves as a research artifact. For industrial applications or extensions, please reach out through LinkedIN.
 
 ---
 
