@@ -9,7 +9,7 @@
 
 This repository supports my bachelor's thesis "Visual Anomaly Detection of Intake Module Pre-filters Using Unsupervised Deep Learning" from Brno University of Technology. The work presents an industrial-grade solution for automated quality inspection of automotive pre-filter components.
 
-** Key Achievement:** AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
+Key Achievement: AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
 
 ##  Overview
 
@@ -139,7 +139,7 @@ Figure 5 - DFR outputs for Dataset-A: (a) original, (b) heatmap, (c) ground trut
 
 Figure 6 - DFR outputs for Dataset-B: (a) original, (b) heatmap, (c) ground truth, (d) prediction)
 
-** Production Choice**: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
+** Production Choice **: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
 
 ## Reproduce Experiments
 
