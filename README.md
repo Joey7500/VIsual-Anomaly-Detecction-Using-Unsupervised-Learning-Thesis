@@ -278,8 +278,5 @@ Core scripts from thesis appendix:
 
 This repository primarily serves as a research artifact. For industrial applications or extensions, please reach out through LinkedIN.
 
----
-
-**⚡ Built with PyTorch • 🏭 Industry-tested • 🎓 Academic research**
 
 *Developed at Brno University of Technology in collaboration with MANN+HUMMEL*
