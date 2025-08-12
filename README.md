@@ -139,7 +139,7 @@ Figure 5 - DFR outputs for Dataset-A: (a) original, (b) heatmap, (c) ground trut
 
 Figure 6 - DFR outputs for Dataset-B: (a) original, (b) heatmap, (c) ground truth, (d) prediction)
 
-** Production Choice **: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
+**Production Choice**: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
 
 ## Reproduce Experiments
 
