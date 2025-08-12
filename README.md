@@ -9,7 +9,7 @@
 
 This repository supports my bachelor's thesis "Visual Anomaly Detection of Intake Module Pre-filters Using Unsupervised Deep Learning" from Brno University of Technology. The work presents an industrial-grade solution for automated quality inspection of automotive pre-filter components.
 
-Key Achievement: AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
+**Key Achievement**: AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
 
 ##  Overview
 
