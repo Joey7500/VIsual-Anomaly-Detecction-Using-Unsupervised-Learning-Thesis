@@ -9,9 +9,9 @@
 
 This repository supports my bachelor's thesis "Visual Anomaly Detection of Intake Module Pre-filters Using Unsupervised Deep Learning" from Brno University of Technology. The work presents an industrial-grade solution for automated quality inspection of automotive pre-filter components.
 
-**🎯 Key Achievement:** AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
+** Key Achievement:** AUROC up to 0.92 for image-level anomaly detection using only normal samples for training.
 
-## 🔍 Overview
+##  Overview
 
 The project tackles a real industrial challenge: detecting subtle visual defects (scratches, burns, missing geometry) on glossy automotive plastic parts where defective samples are scarce. Two deep learning approaches are implemented and compared:
 
@@ -20,26 +20,26 @@ The project tackles a real industrial challenge: detecting subtle visual defects
 
 Both models are trained exclusively on normal (OK) images and evaluated on both image-level classification (OK/NOK) and pixel-level anomaly localization.
 
-## 📁 Contents
+##  Contents
 
-- [🔬 Problem & Data](#-problem--data)
-- [🧠 Methods](#-methods)
-- [📊 Results](#-results)
-- [🛠️ Reproduce Experiments](#️-reproduce-experiments)
-- [🎮 Inference Demo](#-inference-demo)
-- [📂 Dataset Structure](#-dataset-structure)
-- [⚙️ Implementation Details](#️-implementation-details)
-- [🗺️ Roadmap](#️-roadmap)
-- [📄 Citation](#-citation)
+- [Problem & Data](#-problem--data)
+- [Methods](#-methods)
+- [Results](#-results)
+- [Reproduce Experiments](#️-reproduce-experiments)
+- [Inference Demo](#-inference-demo)
+- [Dataset Structure](#-dataset-structure)
+- [Implementation Details](#️-implementation-details)
+- [Roadmap](#️-roadmap)
+- [Citation](#-citation)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.9+
 - PyTorch with CUDA support (recommended)
 - GPU with ≥11GB VRAM (for DFR models)
 
-## 🔬 Problem & Data
+## Problem & Data
 
 ### Target Component
 - **Part**: Automotive plastic intake module pre-filter
@@ -81,9 +81,9 @@ Figure 3 - Enhancement effect comparison (before/after)
   - Geometric: H/V flips (40%), rotations 90°/180°/270° (15%)
   - Noise: Gaussian noise (3 levels, 30%), Gaussian blur (20%)
 
-## 🧠 Methods
+## Methods
 
-### 1️⃣ Baseline Autoencoder with Attention
+### 1️ Baseline Autoencoder with Attention
 Input (512×512×3) → Encoder → Bottleneck → Decoder → Output (512×512×3)
 ↓ ↑
 Skip Connection + CBAM Attention
@@ -95,7 +95,7 @@ Skip Connection + CBAM Attention
 - **Training**: AdamW, 25 epochs, batch size 16
 - **Result**: Poor generalization, useful as negative control
 
-### 2️⃣ Deep Feature Reconstruction (DFR) ⭐
+### 2️ Deep Feature Reconstruction (DFR) ⭐
 Input → EfficientNet-B6 → Multi-scale Features → Feature Autoencoder → Anomaly Score
 (6 layers) (832 channels) (1×1 convolutions)
 
@@ -110,7 +110,7 @@ Input → EfficientNet-B6 → Multi-scale Features → Feature Autoencoder → A
 - **Model-128**: 128×128 feature maps → Better pixel-level AUROC (noise suppression)
 - **Model-170**: 170×170 feature maps → Better image-level AUROC (fine detail sensitivity)
 
-## 📊 Results
+## Results
 
 ### Performance Comparison
 
@@ -139,9 +139,9 @@ Figure 5 - DFR outputs for Dataset-A: (a) original, (b) heatmap, (c) ground trut
 
 Figure 6 - DFR outputs for Dataset-B: (a) original, (b) heatmap, (c) ground truth, (d) prediction)
 
-**🏆 Production Choice**: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
+** Production Choice**: DFR Model-170 on Dataset-B achieves 0.92 image-level AUROC, optimal for industrial OK/NOK classification.
 
-## 🛠️ Reproduce Experiments
+## Reproduce Experiments
 
 ### 1. Prepare Dataset
 Structure your data according to the [Dataset Structure](#-dataset-structure) section below.
@@ -165,7 +165,7 @@ python Feature_AE_final.py
 ### 4. Evaluate Models
 The scripts include evaluation code with AUROC computation, confusion matrices, and pixel-level metrics.
 
-## 🎮 Inference Demo
+## Inference Demo
 
 Run real-time inference with the best model:
 python Final_implementation_of_Real-time_inference.py
@@ -184,9 +184,9 @@ Figure 7 - Final implementation (OK part example)
 
 Figure 8 - Final implementation (NOK part with overlay)
 
-⚠️ **Note**: 20px border cropping applied to suppress padding artifacts - keep critical regions away from image edges.
+**Note**: 20px border cropping applied to suppress padding artifacts - keep critical regions away from image edges.
 
-## 📂 Dataset Structure
+## Dataset Structure
 
 data/
 
@@ -238,7 +238,7 @@ TOP_K = 20 # anomaly scoring
 - Crop 20px borders during evaluation to reduce artifacts
 - Apply enhancement selectively (test + 15% train) to avoid overfitting
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] **Border Artifact Reduction**: Improve receptive field handling
 - [ ] **Multi-view Fusion**: Combine 2-3 controlled poses instead of random orientations  
@@ -246,7 +246,7 @@ TOP_K = 20 # anomaly scoring
 - [ ] **Lightweight Backbones**: Evaluate TinyAD/MobileNet alternatives
 - [ ] **Comparative Study**: Integrate PatchCore, PaDiM, Student-Teacher methods
 
-## 📄 Citation
+## Citation
 
 If this work helps your research or industrial application, please cite:
 
@@ -259,7 +259,7 @@ url={https://www.vut.cz/en/students/final-thesis/detail/165885}
 }
 
 
-## 📋 Repository Files
+## Repository Files
 
 Core scripts from thesis appendix:
 
@@ -274,7 +274,7 @@ Core scripts from thesis appendix:
 | `Test_enhancement.py` | Image enhancement pipeline |
 | `SSIM_loss_class.py` | Structural similarity loss function |
 
-## 🤝 Contributing
+## Contributing
 
 This repository primarily serves as a research artifact. For industrial applications or extensions, please reach out through LinkedIN.
 
