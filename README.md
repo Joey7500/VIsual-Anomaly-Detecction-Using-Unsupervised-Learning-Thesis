@@ -95,7 +95,7 @@ Skip Connection + CBAM Attention
 - **Training**: AdamW, 25 epochs, batch size 16
 - **Result**: Poor generalization, useful as negative control
 
-### 2️ Deep Feature Reconstruction (DFR) ⭐
+### 2️ Deep Feature Reconstruction (DFR)
 Input → EfficientNet-B6 → Multi-scale Features → Feature Autoencoder → Anomaly Score
 (6 layers) (832 channels) (1×1 convolutions)
 
